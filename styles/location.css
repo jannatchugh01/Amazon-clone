@@ -1,0 +1,25 @@
+.form-container{
+    justify-content: center;
+    align-items: center;
+    margin-top: 120px;
+    margin-left: 400px;
+}
+.form-container h2{
+    margin-bottom: 30px;
+}
+.category{
+    font-weight: bold;
+}
+.category-value{
+    margin-bottom: 13px;
+    margin-top:7px;
+    width: 450px;
+    border-radius: 7px;
+    height: 30px;
+}
+.submit-button{
+    margin-top:10px;
+    width: 90px;
+    padding: 5px;
+    border-radius: 15px;
+}
