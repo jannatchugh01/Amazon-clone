@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,4 +179,186 @@
         }
         </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location</title>
+    <link rel="icon" href="images/amazon-mobile-logo.png" type="image/x-icon">
+    <!-- Load a font called Roboto from Google Fonts. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/amazon-header.css">
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/location.css">
+    <link rel="stylesheet" href="styles/amazon-footer.css"
+</head>
+<body>
+     <!--Header of amazon-->
+     <div class="header">
+        <div class="header-first-section">
+            <a href="home.html" class="header-link" onclick="handleHeaderClick(event)">
+                <img src="images/amazon-logo-white.png" class="amazon-logo">
+                <img src="images/amazon-mobile-logo-white.png" class="amazon-mobile-logo">
+            </a>
+        </div>
+        <div class="header-second-section">
+            <button class="location-button location">
+                ⚲ Delivering to Delhi 110009 <span style="font-size:16px; font-weight: bold;">Update Location</span>
+            </button>
+            <div class="form-popup" >
+                <div class="top">
+                    <p>Choose your location</p>
+                    <button onclick="closeForm()">❌</button>
+                </div>
+                <p>Select a delivery location to see product availability and delivery options</p>
+                <div class="addresses">
+                    <div class="address1">
+                        <b>Latika</b>House no.2310,gtb nagar, Delhi 110009
+                    </div>
+                    <div class="address2">
+                        <b>Jannat</b>House no.2008,Shastri Nagar, Delhi 110052
+                    </div>
+                </div>
+                <hr>
+                <a href="location.html" class="add-address">Add an address or pick-up point</a>
+            </div>
+        </div>
+        <div class="header-third-section">
+            <input type="text" class="search-bar" placeholder="Search Amazon.in">
+            <button class="search-button">
+                <img src="images/search-icon.png" class="search-icon">
+            </button>
+        </div>
+        <div class="header-forth-section">
+            <button class="login-link">Hello,User<b> Account & Lists</b></button> 
+        </div>
+        <div class="header-fifth-section">
+            <a class="order-link" href="orders.html">
+                <span class="returns-text">Returns</span>
+                <span class="orders-text">& Orders</span>
+            </a>
+            <a class="cart-link" href="checkout.html">
+                <img class="cart-icon" src="images/cart-icon.png">
+                <div class="cart-quantity">3</div>
+                <div class="cart-text">Cart</div>
+            </a>
+        </div>
+    </div>
+
+    <!--Location-Form-->
+    <div class="form-container">
+        <h2>Add a new address</h2>
+        <form class="address-form" onsubmit="handleSubmit(event)">
+            <label for="country" class="category">Country/Region</label><br>
+            <select class="country-section category-value">
+                <option value="Afghanistan">Afghanistan</option>
+                <option value="Aland Islands">Aland Islands</option>
+                <option value="Albania">Albania</option>
+                <option value="Algeria">Algeria</option>
+                <option value="American Samoa">American Samoa</option>
+                <option value="Andorra">Andorra</option>
+                <option value="Angola">Angola</option>
+                <option value="Anguilla">Anguilla</option>
+                <option value="Antarctica">Antarctica</option>
+                <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+                <option value="Agentina">Agentina</option>
+                <option value="Armenia">Armenia</option>
+                <option value="Aruba">Aruba</option>
+                <option value="Australia">Australia</option>
+                <option value="Austria">Austria</option>
+                <option value="Azerbaijan">Azerbaijan</option>
+                <option value="Brazil">Brazil</option>
+                <option value="Canada">Canada</option>
+                <option value="France">France</option>
+                <option value="Germany">Germany</option>
+                <option selected value="India">India</option>
+                <option value="Italy">Italy</option>
+                <option value="Japan">Japan</option>
+                <option value="Mexico">Mexico</option>
+                <option value="Netherlands">Netherlands</option>
+                <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Singapore">Singapore</option>
+                <option value="Spain">Spain</option>
+                <option value="Turkey">Turkey</option>
+                <option value="UAE">UAE</option>
+                <option value="UK">UK</option>
+                <option value="US">US</option>
+            </select><br>
+            <label for="name" class="category">Full name (First and Last name)</label><br>
+            <input type="text" id="name" class="category-value" required><br>
+            <label for="phone" class="category">Mobile number</label><br>
+            <input type="number" id="phone" class="category-value" required><br>
+            <label for="pincode" class="category">Pincode</label><br>
+            <input type="number" id="pincode" placeholder="6 digits [0-9] PIN code" class="category-value" required ><br>
+            <label for="flat" class="category">Flat, House no., Building, Company, Apartment</label><br>
+            <input type="text" id="flat" class="category-value" required><br>
+            <label for="area" class="category">Area, Street, Sector, Village</label><br>
+            <input type="text" id="area" class="category-value" required><br>
+            <label for="landmark" class="category">Landmark</label><br>
+            <input type="text" id="landmark" class="category-value" placeholder="E.g. near apollo hospital"><br>
+            <label for="town" class="category" >Town/City</label><br>
+            <input type="text" id="town" class="category-value" required><br>
+            <label for="State" class="category">State</label><br>
+            <input type="text" id="state" placeholder="Choose a state" class="category-value" required><br>
+            <input type="checkbox" id="default-checkbox" name="default-checkbox">
+            <label for="default-checkbox">Make this my default address</label><br>
+            <input type="submit" value="Add address" class="submit-button button-primary">
+        </form>
+        
+    </div>
+    <div class="footer">
+        <button onclick="document.location='#'" class="backToTop">Back to top</button>
+    <div class="sections">
+        <div>
+            <h4>Get to Know Us</h4>
+            <a href="#">About Amazon</a><br>
+            <a href="#">Careers</a><br>
+            <a href="#">Press Releases</a><br>
+        </div>
+        <div>
+            <h4>Connect with Us</h4>
+            <a href="#">Facebook</a><br>
+            <a href="#">Twitter</a><br>
+            <a href="#">Instagram</a><br>
+        </div>
+        <div>
+            <h4>Make Money with Us</h4>
+            <a href="#">Sell on Amazon</a><br>
+            <a href="#">Sell under Amazon Accelerator</a><br>
+            <a href="#">Protect and Build Your Brand</a><br>
+            <a href="#">Amazon Global Selling </a><br>
+            <a href="#">Supply to Amazon</a><br>
+            <a href="#">Become an Affiliate</a><br>
+        </div>
+        <div>
+            <h4>Let Us Help You</h4>
+            <a href="#">Your Account</a><br>
+            <a href="#">Return Centre</a><br>
+            <a href="#">Recalls and Product Safety Alerts</a><br>
+            <a href="#">100% Purchase Protection</a><br>
+            <a href="#">Amazon App Download</a><br>
+            <a href="#">Help</a><br>
+        </div>
+    </div>
+</div>
+     <script>
+        function handleSubmit(event){
+            event.preventDefault();
+            alert("Form submitted!");
+            closeForm();
+        }
+        function handleHeaderClick(event){
+            closeForm();
+        }
+        function closeForm() {
+          document.querySelector(".form-popup").style.display = "none";
+          document.body.classList.remove("no-scroll"); 
+        }
+        </script>
+</body>
+>>>>>>> ddcdd6e9acdf50e585e8f933edaf4ef0362b2dd7
 </html>
