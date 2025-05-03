@@ -1,18 +1,9 @@
-import {cart, removeFromCart, updateCartQuantity, saveToStorage} from '../../data/cart.js';
-import { products} from '../../data/products.js';
+import {cart, removeFromCart, updateCartQuantity, saveToStorage, updateDeliveryOption} from '../../data/cart.js';
+import { products, getProduct} from '../../data/products.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
+import { paymentSummary } from './paymentSummary.js';
 
 export function checkout(){
-    // searching the product ID
-    function searchingProduct(productId){
-        let matchingProduct;
-
-        products.forEach((product) => {
-            if(product.id === productId){
-                matchingProduct = product;
-            }
-        });
-        return matchingProduct;
-    }
 
     // setting the delivery dates
     function deliveryDates(dateString, days){
@@ -20,16 +11,19 @@ export function checkout(){
         newDate.setDate(newDate.getDate() + days);
         return newDate;
     }
-
+    const today = new Date();
+    const date = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
     // Html for checkout page
     let cartProduct = '';
     cart.forEach(cartItem => {
         const productId = cartItem.productId;
-        let addedProduct = searchingProduct(productId);
-        let date = cartItem.deliveryDate;
+        const addedProduct = getProduct(productId);
+        const deliveryOptionId = cartItem.deliveryOptionId;
+        const deliveryOption = getDeliveryOption(deliveryOptionId);
+        const deliveryDate = deliveryDates(date, deliveryOption.deliveryDays).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
         cartProduct += `
             <div class="cart-item-container js-remove-from-cart-${addedProduct.id}">
-                <div class="delivery-date">Delivery date: ${deliveryDates(date,7).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+                <div class="delivery-date">Delivery date: ${deliveryDate}</div>
                     <div class="cart-item-details-grid">
                         <img class="product-image" src="${addedProduct.image}">
                         <div class="cart-item-details">
@@ -56,62 +50,48 @@ export function checkout(){
                             <div class="delivery-options-title">
                                 Choose a delivery option:
                             </div>
-                            <div class="delivery-option">
-                                <input type="radio" checked class="delivery-option-input" name="${addedProduct.id}">
-                                <div>
-                                    <div class="delivery-option-date">
-                                    ${deliveryDates(date,7).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                                    </div>
-                                    <div class="delivery-option-price">
-                                        FREE Shipping
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="delivery-option">
-                                <input type="radio" class="delivery-option-input" name="${addedProduct.id}">
-                                <div>
-                                    <div class="delivery-option-date">
-                                    ${deliveryDates(date,4).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                                    </div>
-                                    <div class="delivery-option-price">
-                                        $4.99 - Shipping
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="delivery-option">
-                                <input type="radio" class="delivery-option-input" name="${addedProduct.id}">
-                                <div>
-                                    <div class="delivery-option-date">
-                                    ${deliveryDates(date,1).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
-                                    </div>
-                                    <div class="delivery-option-price">
-                                        $9.99 Shipping
-                                    </div>
-                                </div>
-                            </div>
+                            ${deliveryOptionsHTML(addedProduct, cartItem)}
                         </div>
                     </div>
                 </div>
             `
     });
 
+    function deliveryOptionsHTML(addedProduct, cartItem){
+        let html = '';
+        deliveryOptions.forEach(deliveryOption => {
+            const deliveryDate = deliveryDates(date,deliveryOption.deliveryDays).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            const priceString = deliveryOption.priceCents === 0
+            ? 'FREE'
+            : `$${(deliveryOption.priceCents)/100} -`;
+
+            const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
+
+            html += `
+            <div class="delivery-option"
+            data-product-id="${addedProduct.id}"
+            data-delivery-option-id="${deliveryOption.id}">
+                <input type="radio" 
+                class="delivery-option-input" 
+                name="delivery-option-${addedProduct.id}" 
+                ${isChecked ? 'checked' : ''} >
+                <div>
+                    <div class="delivery-option-date">
+                    ${deliveryDate}
+                    </div>
+                    <div class="delivery-option-price">
+                        ${priceString} Shipping
+                    </div>
+                </div>
+            </div>
+            `
+        })
+        return html;
+    }
     // adding html to page
     document.querySelector('.checkout-details').innerHTML = cartProduct;
     updateCartQuantity();
 
-    // changing delivery dates
-    document.querySelectorAll(`.delivery-option-input`).forEach((date) => {
-        date.addEventListener('change', () =>{
-            const productId = date.name;
-            const selectedDate = date.closest('.delivery-option').querySelector('.delivery-option-date').textContent;
-            document.querySelector(`.js-remove-from-cart-${productId} .delivery-date`).innerHTML = `Delivery date: ${selectedDate}`;
-            const cartItem = cart.find(item => item.productId === productId);
-            if (cartItem) {
-                cartItem.deliveryDate = selectedDate;
-                saveToStorage();
-            }
-        })
-    })
     // working of delete
     document.querySelectorAll('.delete-quantity-link').forEach((link) =>{
         link.addEventListener('click', () => {
@@ -120,6 +100,7 @@ export function checkout(){
             const container = document.querySelector(`.js-remove-from-cart-${productId}`);
             container.remove();
             updateCartQuantity();
+            paymentSummary();
         })
     })
     // working of update
@@ -149,6 +130,7 @@ export function checkout(){
                     cartItem.quantity = newQuantity;
                     saveToStorage();
                     updateCartQuantity();
+                    paymentSummary();
                     const newLabel = document.createElement('span');
                     newLabel.classList.add('quantity-label');
                     newLabel.textContent = newQuantity;
@@ -157,6 +139,19 @@ export function checkout(){
                 }
             })
             updateCartQuantity();
+            paymentSummary();
         })
     })
+
+    // updating delivery date
+    document.querySelectorAll('.delivery-option-input')
+    .forEach((element) => {
+      element.addEventListener('change', () => {
+        const container = element.closest('.delivery-option');
+        const {productId, deliveryOptionId} = container.dataset;
+        updateDeliveryOption(productId, deliveryOptionId);
+        checkout();
+        paymentSummary();
+      });
+    });
 }
