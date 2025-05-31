@@ -75,7 +75,6 @@ products.forEach((product) => {
             </div>
             `;
 });
-console.log(productsHTML);
 // adding html to home page
 document.querySelector('.products-grid').innerHTML = productsHTML;
 // opening and closing of location form
@@ -103,14 +102,12 @@ document.querySelectorAll('.add-to-cart-button')
     .forEach((button)=> {
         button.addEventListener('click', () =>{
             const productId = button.dataset.productId;
-
             const ProductContainer = button.closest('.product-container');
             const quantitySelector = ProductContainer.querySelector('select');
             selectedValue = parseInt(quantitySelector.value);
-            const productContainer = button.closest('.product-container');
             addToCart(productId, selectedValue);
             updateCartQuantity();
-            addedToCart(productContainer);
+            addedToCart(ProductContainer);
                 
             });
     })
